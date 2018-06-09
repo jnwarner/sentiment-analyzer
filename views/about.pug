@@ -1,0 +1,66 @@
+extends layout
+
+block head_content
+	title Welcome
+
+block content
+	.header
+		nav
+			.left
+				ul
+					li
+						a(href='/') Home
+					li
+						a(href='/about') About
+			.right
+				.searchCol
+					form(id='search-form' autocomplete='off' action='/')
+						.autocomplete
+							input(id='search-bar' type='text' placeholder='Search')
+						button(id='search-button')
+							i(class='fas fa-search')
+		.header_content
+			i(class='fas fa-question-circle icon')
+			h1.title About the Scraper
+			p.subtext So you really want to know what the scraper does, huh?
+	.container-fluid
+		.row
+			.col-md-4
+				.card-flat
+					h2 How it Works
+					ol
+						li
+							p The app listens for tweets containing 
+								strong #{filter} 
+								| and catches the user that created the tweet.
+						li
+							p It then scrapes up to 200 of the user's most recent tweets.
+						li
+							p The app will analyze each tweet to determine the overall sentiment of the user.
+						li
+							p After analyzing, the user may find their profile with visualization of the data collected.
+			.col-md-4
+				.card-flat
+					h2 About Scoring
+					ul
+						li
+							p Each word in a tweet is scored between 
+								strong -5 
+								| and 5.
+						li
+							p A total score for each tweet is made by getting the sum of the scored words.
+						li
+							p A comparative score is made by getting the sum of scored words, then dividing by the number of total words in the tweet.
+			.col-md-4
+				.card-flat
+					h2 Modules/Libraries
+					ul
+						li
+							p Sentiment
+						li
+							p Twitter
+						li
+							p Chart.js
+	script.
+		let userArr = !{JSON.stringify(users)}
+		autocomplete(document.getElementById('search-bar'), userArr)

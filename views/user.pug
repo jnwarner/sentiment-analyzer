@@ -1,0 +1,120 @@
+extends layout
+
+block head_content
+	title #{user.name}'s Profile (@#{user.screen_name})
+
+block content
+	.header(style=`background: linear-gradient(326deg, rgba(${user.profile_color}, ${user.profile_banner_url === undefined ? '.98' : '.5'}), rgba(${user.profile_color}, ${user.profile_banner_url === undefined ? '.98' : '.5'})),
+				url('${user.profile_banner_url === undefined ? '../images/header-background.png' : user.profile_banner_url}');background-size: cover; background-position: center;`)
+		nav
+			.left
+				ul
+					li
+						a(href='/') Home
+					li
+						a(href='/about') About
+			.right
+				.searchCol
+					form(id='search-form' autocomplete='off' action='/')
+						.autocomplete
+							input(id='search-bar' type='text' placeholder='Search')
+						button(id='search-button')
+							i(class='fas fa-search')
+		.header_content
+			img.pfp(src=user.profile_image_url)
+			h1.title #{user.name}
+			a.screen_name(href=user.profile_url target='_blank') @#{user.screen_name} 
+				i(class='fas fa-external-link')
+	.container-fluid
+		.row
+			.col-md-3
+				.card
+					.content
+						.card-flat
+							i(class="fas fa-user fa-3x")
+							h2 Overview
+							hr
+							div(style="text-align: left; padding-left: 25px")
+								p
+									strong Average Score: 
+									| #{user.score.toFixed(1)}
+								p
+									strong Comparative: 
+									| #{user.comp_score.toFixed(2)}
+								p
+									strong Positive Tweets: 
+									| #{user.positive_tweets}
+								p
+									strong Negative Tweets: 
+									| #{user.negative_tweets}
+								p
+									strong Neutral Tweets: 
+									| #{user.neutral_tweets}
+								p
+									strong Tweets Scored: 
+									| #{user.tweets_scored}/#{user.tweets_collected}
+								p
+									strong #{(user.positive_avg * 100).toFixed(1)}% 
+									| likely to use a positive word
+								p
+									strong #{(user.negative_avg * 100).toFixed(1)}% 
+									| likely to use a negative word
+								
+			.col-md-9
+				.card
+					.content
+						.card-flat
+							i(class="fas fa-chart-pie fa-3x")
+							h2 Analytics
+							hr
+							.row
+								.col-md-6
+									h4 Tweet Ratio
+									canvas(id='ratio' width='256' height='256' style="margin: 25px auto; max-width: 400px;")
+								.col-md-6
+									h4 Common Word Usage
+									canvas(id='words' width='256' height='256' style="margin: 25px auto; max-width: 400px;")
+
+	script.
+		window.onload = function() {
+		var red="#DC493A", purple="#52489C", blue="#4392F1", redt="rgba(220,73,58,.75)", bluet="rgba(67,146,241,.75)";
+		var positive="#{user.positive_tweets}", negative="#{user.negative_tweets}", neutral="#{user.neutral_tweets}"
+		var ctx1 = document.getElementById("ratio").getContext('2d');
+		var chart1 = new Chart(ctx1,  {
+			type: 'doughnut',
+			data: {
+				labels: ["Positive", "Neutral", "Negative"],
+				datasets: [{
+					label: 'Tweet Ratios',
+					data: [positive, neutral, negative],
+					backgroundColor: [blue, purple, red]
+				}],
+			},
+			options: {
+				title: { 
+					display: false
+				},
+				legend: {
+					position: 'top'
+				},
+			}
+		});
+		var ctx2 = document.getElementById("words").getContext('2d');
+		let wordsTemp = "#{words}"
+		let wordsFinal = wordsTemp.split(',');
+		let values = [#{values}];
+		var chart2 = new Chart(ctx2,  {
+			type: 'polarArea',
+			data: {
+				labels: wordsFinal,
+				datasets: [{
+					label: 'Words Used',
+					data: values,
+					backgroundColor: [bluet, bluet, bluet, redt, redt, redt]
+				}],
+			}
+		});
+		let userArr = !{JSON.stringify(users)};
+		autocomplete(document.getElementById('search-bar'), userArr);
+		};
+		

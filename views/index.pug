@@ -1,0 +1,159 @@
+extends layout
+
+block head_content
+	title Welcome
+
+block content
+	.header
+		nav
+			.left
+				ul
+					li
+						a(href='/') Home
+					li
+						a(href='/about') About
+			.right
+				.searchCol
+					form(id='search-form' autocomplete='off' action='/')
+						.autocomplete
+							input(id='search-bar' type='text' placeholder='Search')
+						button(id='search-button')
+							i(class='fas fa-search')
+		.header_content
+			i(class='fab fa-twitter icon')
+			h1.title Welcome to the Sentiment Analyzer
+			if num_users > 0
+				p.subtext Analyzing 
+					strong #{num_users} 
+					| users and counting
+			else
+				p.subtext Soon to be analyzing
+	.container-fluid
+		if positive.length === 0 || negative.length === 0 || profiles.length === 0
+			.row
+				.col-md-12(style='text-align: center; height: 500px;')
+					i(class='fas fa-exclamation-circle fa-10x' style='margin: 0;')
+					h1 Uh Oh!
+					h4 Looks like we don't have anything... yet. Check back in a moment!
+					h5 Tweet 
+						strong #{filter} 
+						| to get an analysis on your profile!
+		else
+			.row
+				.col-md-12(style='text-align: center;')
+					h1
+						i(class='fas fa-user-circle')
+						| Sentiment Profiles
+					h4 Below are user sentiment profiles from tweets including 
+						strong #{filter}
+						| .
+						br
+						| Tap or click a user icon to see more information.
+			.row
+				.col-md-12
+					h2
+						i(class='fas fa-thumbs-up')
+						| Most Positive
+			- var index = 0
+			while index < positive.length
+				.row
+					each profile in positive.slice(index, index + 3)
+						- index++
+						.col-md-4
+							.card
+								img.banner(style=`background: linear-gradient(326deg, rgba(${profile.profile_color}, ${profile.profile_banner_url === undefined ? '.98' : '0'}), rgba(${profile.profile_color}, ${profile.profile_banner_url === undefined ? '.98' : '0'})),
+								url('${profile.profile_banner_url === undefined ? '../images/header-background.png' : profile.profile_banner_url}'); background-size: cover; background-position: center;`)
+								.container
+									img.pfp(src=profile.profile_image_url)
+									.middle
+										a.text(href=`/${profile.screen_name}`) View Profile
+								.content
+									.user
+										a(href=`/${profile.screen_name}`)
+											h3.name #{profile.name.length > 20 ? profile.name.substring(0, 20) + '...' : profile.name}
+										a.screen_name(href=`${profile.profile_url}` target='_blank') @#{profile.screen_name} 
+											i(class='fas fa-external-link')
+									.info
+										h6.overview
+											strong Sentiment Overview
+										p 
+											strong Average Score: 
+											| #{profile.score.toFixed(1)}
+										p 
+											strong Scored: 
+											| #{profile.tweets_scored} 
+											small
+												em (#{profile.tweets_collected} collected)
+			.row
+				.col-md-12
+					h2
+						i(class='fas fa-thumbs-down')
+						| Most Negative
+			- var index = 0
+			while index < negative.length
+				.row
+					each profile in negative.slice(index, index + 3)
+						- index++
+						.col-md-4
+							.card
+								img.banner(style=`background: linear-gradient(326deg, rgba(${profile.profile_color}, ${profile.profile_banner_url === undefined ? '.98' : '0'}), rgba(${profile.profile_color}, ${profile.profile_banner_url === undefined ? '.98' : '0'})),
+								url('${profile.profile_banner_url === undefined ? '../images/header-background.png' : profile.profile_banner_url}'); background-size: cover; background-position: center;`)
+								.container
+									img.pfp(src=profile.profile_image_url)
+									.middle
+										a.text(href=`/${profile.screen_name}`) View Profile
+								.content
+									.user
+										a(href=`/${profile.screen_name}`)
+											h3.name #{profile.name.length > 20 ? profile.name.substring(0, 20) + '...' : profile.name}
+										a.screen_name(href=`${profile.profile_url}` target='_blank') @#{profile.screen_name} 
+											i(class='fas fa-external-link')
+									.info
+										h6.overview
+											strong Sentiment Overview
+										p 
+											strong Average Score: 
+											| #{profile.score.toFixed(1)}
+										p 
+											strong Scored: 
+											| #{profile.tweets_scored} 
+											small
+												em (#{profile.tweets_collected} collected)
+			.row
+				.col-md-12
+					h2
+						i(class='fas fa-random')
+						| Random
+			- var index = 0
+			while index < profiles.length
+				.row
+					each profile in profiles.slice(index, index + 3)
+						- index++
+						.col-md-4
+							.card
+								img.banner(style=`background: linear-gradient(326deg, rgba(${profile.profile_color}, ${profile.profile_banner_url === undefined ? '.98' : '0'}), rgba(${profile.profile_color}, ${profile.profile_banner_url === undefined ? '.98' : '0'})),
+								url('${profile.profile_banner_url === undefined ? '../images/header-background.png' : profile.profile_banner_url}'); background-size: cover; background-position: center;`)
+								.container
+									img.pfp(src=profile.profile_image_url)
+									.middle
+										a.text(href=`/${profile.screen_name}`) View Profile
+								.content
+									.user
+										a(href=`/${profile.screen_name}`)
+											h3.name #{profile.name.length > 20 ? profile.name.substring(0, 20) + '...' : profile.name}
+										a.screen_name(href=`${profile.profile_url}` target='_blank') @#{profile.screen_name} 
+											i(class='fas fa-external-link')
+									.info
+										h6.overview
+											strong Sentiment Overview
+										p 
+											strong Average Score: 
+											| #{profile.score.toFixed(1)}
+										p 
+											strong Scored: 
+											| #{profile.tweets_scored} 
+											small
+												em (#{profile.tweets_collected} collected)
+	script.
+		let userArr = !{JSON.stringify(users)}
+		autocomplete(document.getElementById('search-bar'), userArr)

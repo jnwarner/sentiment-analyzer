@@ -1,0 +1,35 @@
+extends layout
+
+block head_content
+	title Oh No!
+
+block content
+	.header
+		nav
+			.left
+				ul
+					li
+						a(href='/') Home
+					li
+						a(href='/about') About
+			.right
+				.searchCol
+					form(id='search-form' autocomplete='off' action='/')
+						.autocomplete
+							input(id='search-bar' type='text' placeholder='Search')
+						button(id='search-button')
+							i(class='fas fa-search')
+		.header_content
+			i(class='fas fa-exclamation-circle icon')
+			h1.title Oh no, an Error!
+			p.subtext The page you are trying to reach does not exist.
+	.container-fluid
+		.row
+			.col-md-12
+				.card-flat(style='text-align: center; height: 250px;')
+					h1 How did you get here?
+					a.button(href='/') I DON'T KNOW, HELP
+					a.button(href='/') GET ME OUT OF HERE
+	script.
+		let userArr = !{JSON.stringify(users)}
+		autocomplete(document.getElementById('search-bar'), userArr)

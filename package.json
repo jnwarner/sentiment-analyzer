@@ -1,0 +1,19 @@
+{
+  "name": "final_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "jnw56",
+  "license": "ISC",
+  "dependencies": {
+    "chart.js": "^2.7.2",
+    "express": "^4.16.3",
+    "ip": "^1.1.5",
+    "pug": "^2.0.3",
+    "sentiment": "^4.2.0",
+    "twitter": "^1.7.1"
+  }
+}
